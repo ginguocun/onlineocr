@@ -1,6 +1,12 @@
+import os
+from pathlib import Path
+
+from django.conf import settings
 from django.db import models
 
 from django.utils.translation import gettext_lazy as _
+
+from app.ocr import get_letters_from_image
 
 
 class ImageUpload(models.Model):
@@ -23,3 +29,20 @@ class ImageUpload(models.Model):
             self.pk,
             self.file_name,
         )
+
+    def get_file_name(self):
+        """
+        Get the file_name from the image
+        """
+        if self.image and not self.file_name:
+            self.file_name = Path(getattr(self, 'image').name).name
+
+    def save(self, *args, **kwargs):
+        # save the file_name of the image
+        self.get_file_name()
+        super(ImageUpload, self).save(*args, **kwargs)
+        if self.image:
+            path = os.path.join(settings.MEDIA_ROOT, self.image.name)
+            self.letters = get_letters_from_image(path)
+            super(ImageUpload, self).save(update_fields=['letters'])
+

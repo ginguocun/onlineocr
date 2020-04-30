@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from rest_framework.generics import CreateAPIView, ListAPIView
 
-# Create your views here.
+from app.serializers import ImageUploadSerializer
+
+
+class OcrAPIView(CreateAPIView):
+    serializer_class = ImageUploadSerializer
