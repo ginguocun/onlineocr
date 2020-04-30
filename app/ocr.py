@@ -12,7 +12,6 @@ def get_letters_from_image(path):
     :return: a list of letters which are extracted from the image, such as ['letter1', 'letter2']
     """
     res = list()
-    print('path', path)
     letters = pytesseract.image_to_string(Image.open(path))
     if letters:
         res = re.split(r'\s', letters)

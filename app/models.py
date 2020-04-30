@@ -43,6 +43,9 @@ class ImageUpload(models.Model):
         super(ImageUpload, self).save(*args, **kwargs)
         if self.image:
             path = os.path.join(settings.MEDIA_ROOT, self.image.name)
-            self.letters = get_letters_from_image(path)
-            super(ImageUpload, self).save(update_fields=['letters'])
-
+            # get the letters from the image
+            letters = get_letters_from_image(path)
+            if isinstance(letters, list):
+                self.letters = letters
+                self.count = len(letters)
+            super(ImageUpload, self).save(update_fields=['letters', 'count'])
