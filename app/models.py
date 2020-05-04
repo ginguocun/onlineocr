@@ -10,10 +10,19 @@ from app.ocr import get_letters_from_image
 
 
 class ImageUpload(models.Model):
-    image = models.ImageField(_('Image'), null=True, upload_to='image/%Y/%m/%d/')
-    file_name = models.CharField(_('File Name'), max_length=255, null=True, blank=True)
-    letters = models.TextField(_('Letters'), max_length=10000, null=True, blank=True)
-    count = models.PositiveIntegerField(_('Count'), default=0)
+    image = models.ImageField(_('Image'), help_text=_('An image file.'), null=True, upload_to='image/%Y/%m/%d/')
+    file_name = models.CharField(
+        _('File Name'),
+        help_text=_('The original file name of the image file, which is automatically extracted from the file.'),
+        max_length=255, null=True, blank=True)
+    letters = models.TextField(
+        _('Letters'),
+        help_text=_('Which are automatically extracted from the image after the image file is saved.'),
+        max_length=10000, null=True, blank=True)
+    count = models.PositiveIntegerField(
+        _('Count'),
+        help_text=_('The total number of letters.'),
+        default=0)
     created_at = models.DateTimeField(_('Created At'), auto_now_add=True)
     updated_at = models.DateTimeField(_('Updated At'), auto_now=True)
 
