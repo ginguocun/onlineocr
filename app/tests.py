@@ -23,9 +23,10 @@ image_data = {
     'image': os.path.join(settings.MEDIA_ROOT, 'test/test01.png'),
     'file_name': 'test01.png',
     'letters': [
-        'Django', 'makes', 'it', 'easier', 'to', 'build', 'better', 'Web',
-        'apps', 'more', 'quickly', 'and', 'with', 'less', 'code.'],
-    'count': 15,
+        'D', 'j', 'a', 'n', 'g', 'o', 'm', 'a', 'k', 'e', 's', 'i', 't', 'e', 'a', 's', 'i', 'e', 'r', 't', 'o', 'b',
+        'u', 'i', 'l', 'd', 'b', 'e', 't', 't', 'e', 'r', 'W', 'e', 'b', 'a', 'p', 'p', 's', 'm', 'o', 'r', 'e', 'q',
+        'u', 'i', 'c', 'k', 'l', 'y', 'a', 'n', 'd', 'w', 'i', 't', 'h', 'l', 'e', 's', 's', 'c', 'o', 'd', 'e'],
+    'count': 65,
     'created_by': None
 }
 
@@ -68,6 +69,7 @@ class ImageUploadModelTest(TestCase):
     def test_create_1(self):
         image_upload_record_1 = ImageUpload.objects.create(image=self.image_data['path'])
         self.assertEqual(image_upload_record_1.file_name, self.image_data['file_name'])
+        print(image_upload_record_1.letters)
         self.assertEqual(image_upload_record_1.letters, self.image_data['letters'])
         self.assertEqual(image_upload_record_1.count, self.image_data['count'])
         self.assertEqual(image_upload_record_1.created_by, self.image_data['created_by'])

@@ -14,5 +14,7 @@ def get_letters_from_image(path):
     res = list()
     letters = pytesseract.image_to_string(Image.open(path))
     if letters:
-        res = re.split(r'\s', letters)
+        for letter in letters:
+            if re.match(r'[a-zA-Z]', letter):
+                res.append(letter)
     return res
