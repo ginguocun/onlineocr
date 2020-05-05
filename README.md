@@ -2,21 +2,15 @@
 
 This is an open source online OCR service built by the Django framework.
 
+## 1. Requirements
 
-
-[TOC]
-
-
-
-## Requirements
-
-### Run directly
+### 1.1. Run directly
 
 - python 3.8
 
 - tesseract 4.1.x
 
-#### install Tesseract
+#### 1.1.1. install Tesseract
 
 [https://github.com/tesseract-ocr/tessdoc/blob/master/Home.md](https://github.com/tesseract-ocr/tessdoc/blob/master/Home.md)
 
@@ -59,11 +53,11 @@ sudo apt install tesseract-ocr
 sudo apt install libtesseract-dev
 ```
 
-### Run by Docker 
+### 1.2. Run by Docker 
 
 Docker Engine
 
-## What's included
+## 2. What's included
 
 Within the download, you'll find the following directories and files. You'll see something like this:
 
@@ -83,7 +77,10 @@ Within the download, you'll find the following directories and files. You'll see
 │    ├────serializers.py
 │    ├────urls_api.py
 │    └────views.py
+├────db/
+│    └────__init__.py
 ├────dockerfile_base
+├────dockerfile_product
 ├────manage.py
 ├────media/
 │    └────test/
@@ -96,51 +93,57 @@ Within the download, you'll find the following directories and files. You'll see
 │    └────wsgi.py
 ├────README.md
 ├────requirements.txt
+├────sources.list
+├────start.sh
 ├────static/
 ├────templates/
+├────uwsgi/
+├────uwsgi.ini
 └────uwsgi_params
 
 ```
 
-## Run directly
+## 3. Run directly
 
+Before run it you need first install Tesseract.
 
-
-### Clone the project
+### 3.1. Clone the project
 
 ```sh
 git clone https://github.com/ginguocun/onlineocr.git
 cd onlineocr
 ```
 
-### Create the virtual environment
+### 3.2. Create the virtual environment
 
 ```sh
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### Install the reqirements
+### 3.3. Install the reqirements
 
 ```sh
 pip install -r requirements.txt
 ```
 
-### Migrate the database
+### 3.4. Migrate the database
 
 ```sh
 python3 manage.py migrate
 ```
 
-### Runserver
+### 3.5. Runserver
+
+Start development server at http://127.0.0.1:9999/
 
 ```sh
 python3 manage.py runserver 127.0.0.1:9999
 ```
 
-## Run through docker
+## 4. Run through docker
 
-### Build the basic docker image
+### 4.1. Build the basic docker image
 
 ```sh
 git clone https://github.com/ginguocun/onlineocr.git
@@ -148,14 +151,104 @@ cd onlineocr
 sudo docker build --rm -t onlineocr:base -f dockerfile_base .
 ```
 
-### Build the product docker image
+### 4.2. Build the product docker image
 
 ```sh
 sudo docker build --rm -t onlineocr:latest -f dockerfile_product .
 ```
 
-### Run server by docker
+### 4.3. Runserver by docker run
+
+Start development server at http://127.0.0.1:9999/
 
 ```sh
-sudo docker run -it -p 9001:80 onlineocr:test /bin/bash
+sudo docker run -it -p 9999:80 onlineocr:latest /bin/bash
 ```
+
+## 5. API documents
+
+The online API documents is at http://127.0.0.1:9999/docs/
+
+The main APIs are listed below:
+
+- /api/ocr/
+- /api/history/
+- /api/register/
+- /api/token_obtain_pair/ 
+- /api/token_refresh/
+
+### 5.1. /api/ocr/
+
+POST `/api/ocr/`
+
+This is an API which can take an uploaded image(jpg, png) and find any letters in it.
+
+#### Request Body
+
+The request body should be a `"application/json"` encoded object, containing the following items.
+
+| Parameter            | Description                                    |
+| :------------------- | :--------------------------------------------- |
+| `image` **required** | A image file, the size should be less than 2Mb |
+
+### 5.2. /api/history/
+
+GET `/api/history/`
+
+This is an API used to obtain the historical upload records.
+
+#### Query Parameters
+
+The following parameters can be included as part of a URL query string.
+
+| Parameter  | Description                                    |
+| :--------- | :--------------------------------------------- |
+| `page`     | A page number within the paginated result set. |
+| `search`   | A search term.                                 |
+| `ordering` | Which field to use when ordering the results.  |
+
+### 5.3. /api/register/
+
+POST `/api/register/`
+
+This is an API for user registration.
+
+#### Request Body
+
+The request body should be a `"application/json"` encoded object, containing the following items.
+
+| Parameter               | Description                                                  |
+| :---------------------- | :----------------------------------------------------------- |
+| `username` **required** | Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. |
+| `email`                 |                                                              |
+| `password` **required** |                                                              |
+
+### 5.4. /api/token_obtain_pair/
+
+POST `/api/token_obtain_pair/`
+
+Takes a set of user credentials and returns an access and refresh JSON web token pair to prove the authentication of those credentials.
+
+#### Request Body
+
+The request body should be a `"application/json"` encoded object, containing the following items.
+
+| Parameter               | Description |
+| :---------------------- | :---------- |
+| `username` **required** |             |
+| `password` **required** |             |
+
+### 5.5. /api/token_refresh/
+
+POST `/api/token_refresh/`
+
+Takes a refresh type JSON web token and returns an access type JSON web token if the refresh token is valid.
+
+#### Request Body
+
+The request body should be a `"application/json"` encoded object, containing the following items.
+
+| Parameter              | Description |
+| :--------------------- | :---------- |
+| `refresh` **required** |             |
+
