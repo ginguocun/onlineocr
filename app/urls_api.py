@@ -10,6 +10,7 @@ app_name = AppConfig.name
 urlpatterns = format_suffix_patterns([
     re_path(r'^token_obtain_pair/$', token_obtain_pair, name='token_obtain_pair'),
     re_path(r'^token_refresh/$', token_refresh, name='token_refresh'),
+    re_path(r'^register/$', RegisterAPIView.as_view(), name='register'),
     re_path(r'^ocr/$', OcrAPIView.as_view(), name='ocr_api'),
     re_path(r'^history/$', HistoryListAPIView.as_view(), name='history_api'),
 ])
