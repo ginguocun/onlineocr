@@ -1,2 +1,3 @@
-/media/
+/media/image/
+!/media/test/
 db.sqlite3
