@@ -23,6 +23,13 @@ class ImageUpload(models.Model):
         _('Count'),
         help_text=_('The total number of letters.'),
         default=0)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        verbose_name=_('Created By')
+    )
     created_at = models.DateTimeField(_('Created At'), auto_now_add=True)
     updated_at = models.DateTimeField(_('Updated At'), auto_now=True)
 
