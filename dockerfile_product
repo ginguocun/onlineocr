@@ -1,0 +1,8 @@
+FROM onlineocr:base
+MAINTAINER "jingq"<guoqun.jin@hotmail.com>
+COPY . /opt/onlineocr/
+VOLUME ["/opt/onlineocr/media"]
+VOLUME ["/opt/onlineocr/uwsgi"]
+VOLUME ["/opt/onlineocr/db"]
+RUN chmod +x /opt/onlineocr/start.sh
+ENTRYPOINT ["/opt/onlineocr/start.sh"]
